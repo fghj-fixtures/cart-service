@@ -7,10 +7,10 @@ service:
     dockerfile: "Dockerfile"
   ports:
     - "8080"
-  env:
-    - DB_HOST=postgres.fghj.internal
-    - AUTH_API_URL=https://auth.fghj.internal
-    - INVENTORY_API_URL=https://inventory.fghj.internal
+  environment:
+    DB_HOST: postgres.fghj.internal
+    AUTH_API_URL: https://auth.fghj.internal
+    INVENTORY_API_URL: https://inventory.fghj.internal
   dependencies:
     - kind: "service"
       repo: "git@github.com:fghj-fixtures/auth-service.git"
@@ -23,8 +23,8 @@ service:
     - kind: "infra"
       name: "postgres"
       image: "postgres:16"
-      env:
-        - POSTGRES_PASSWORD=devpassword
-        - POSTGRES_DB=cart
+      environment:
+        POSTGRES_PASSWORD: devpassword
+        POSTGRES_DB: cart
       ports:
         - "5432"
