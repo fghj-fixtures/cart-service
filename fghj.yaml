@@ -1,0 +1,30 @@
+version: "1.0"
+service:
+  name: "cart-service"
+  internal_domain: "cart.fghj.internal"
+  build:
+    context: "."
+    dockerfile: "Dockerfile"
+  ports:
+    - "8080"
+  env:
+    - DB_HOST=postgres.fghj.internal
+    - AUTH_API_URL=https://auth.fghj.internal
+    - INVENTORY_API_URL=https://inventory.fghj.internal
+  dependencies:
+    - kind: "service"
+      repo: "git@github.com:fghj-fixtures/auth-service.git"
+      default_branch: "main"
+      local_path: "../auth-service"
+    - kind: "service"
+      repo: "git@github.com:fghj-fixtures/inventory-service.git"
+      default_branch: "main"
+      local_path: "../inventory-service"
+    - kind: "infra"
+      name: "postgres"
+      image: "postgres:16"
+      env:
+        - POSTGRES_PASSWORD=devpassword
+        - POSTGRES_DB=cart
+      ports:
+        - "5432"
