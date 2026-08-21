@@ -12,14 +12,6 @@ service:
     AUTH_API_URL: https://auth.fghj.internal
     INVENTORY_API_URL: https://inventory.fghj.internal
   dependencies:
-    - kind: "service"
-      repo: "git@github.com:fghj-fixtures/auth-service.git"
-      default_branch: "main"
-      local_path: "../auth-service"
-    - kind: "service"
-      repo: "git@github.com:fghj-fixtures/inventory-service.git"
-      default_branch: "main"
-      local_path: "../inventory-service"
     - kind: "infra"
       name: "postgres"
       image: "postgres:16"
@@ -28,3 +20,16 @@ service:
         POSTGRES_DB: cart
       ports:
         - "5432"
+flows:
+  checkout-flow:
+    description: "Checkout — verifies the authenticated user, checks stock, and charges payment. auth-service, inventory-service and payment-service are only needed for this flow, not to browse or manage a cart, so they're declared here rather than as hard service dependencies."
+    dependencies:
+      - kind: "service"
+        repo: "git@github.com:fghj-fixtures/auth-service.git"
+        default_branch: "main"
+      - kind: "service"
+        repo: "git@github.com:fghj-fixtures/inventory-service.git"
+        default_branch: "main"
+      - kind: "service"
+        repo: "git@github.com:fghj-fixtures/payment-service.git"
+        default_branch: "main"
